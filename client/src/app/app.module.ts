@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { RouterModule } from '@angular/router';
 import { appRoutes } from '../routes';
-import { ChartsModule } from "node_modules/ng2-charts/ng2-charts";
+import { ChartsModule } from "ng2-charts";
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
