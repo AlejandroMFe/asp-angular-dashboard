@@ -1,0 +1,10 @@
+tbody{
+    color: greenyellow;   
+    background-color: rgb(12, 12, 12);
+}
+
+tbody:hover {
+  background-color: rgba(245, 239, 239, 0.774);
+  color: rgb(9, 134, 243);
+}
+

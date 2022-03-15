@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Order, SAMPLE_ORDERS } from '../../shared/order';
+
 
 @Component({
   selector: 'app-section-orders',
@@ -8,6 +10,9 @@ import { Component, OnInit } from '@angular/core';
 export class SectionOrdersComponent implements OnInit {
 
   constructor() { }
+
+  // generate mock data for five orders
+  orders: Order[] = SAMPLE_ORDERS
 
   ngOnInit(): void {
   }
