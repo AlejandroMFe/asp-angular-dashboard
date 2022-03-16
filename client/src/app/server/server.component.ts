@@ -13,7 +13,32 @@ export class ServerComponent implements OnInit {
   @Input()
   serverInput!: Server;
 
+  color!: string; 
+  btnText!: string;
+  message!: string;
+  
   ngOnInit(): void {
+    this.setServerStatus(this.serverInput.isOnline);  
   }
 
+  setServerStatus(isOnline: boolean): void{
+    if (isOnline) {
+      this.serverInput.isOnline = isOnline;
+      this.message = isOnline? 'online 🎉' : 'offline 🤪';
+      this.color = '#66BB6A'; // verde
+      this.btnText = 'Shut Down';
+    } else {
+      this.serverInput.isOnline = isOnline;
+      this.message = isOnline? 'online 🟢' : 'offline 🤪';
+      this.color = '#FF5252'; // rojo      
+      this.btnText = 'Start';
+    }
+  }
+
+
+  toggleStatus(status:boolean): void{
+    console.log(this.serverInput.name);
+    this.setServerStatus(!status);
+  }
+  
 }
