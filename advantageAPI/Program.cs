@@ -1,7 +1,3 @@
-using advantageAPI;
-using advantageAPI.Models;
-using Microsoft.EntityFrameworkCore;
-
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration["connectionString"];
 

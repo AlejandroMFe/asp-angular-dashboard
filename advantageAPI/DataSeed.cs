@@ -1,5 +1,3 @@
-using advantageAPI.Models;
-
 namespace advantageAPI;
 
 public class DataSeed

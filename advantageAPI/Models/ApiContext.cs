@@ -1,8 +1,6 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace advantageAPI.Models;
 
-public class ApiContext: DbContext
+public class ApiContext : DbContext
 {
     public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
 

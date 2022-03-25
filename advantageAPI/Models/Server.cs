@@ -1,9 +1,8 @@
-namespace advantageAPI.Models
+namespace advantageAPI.Models;
+
+public class Server
 {
-    public class Server
-    {
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public bool IsOnline { get; set; }
-    }
+    public int Id { get; set; }
+    public string? Name { get; set; }
+    public bool IsOnline { get; set; }
 }
