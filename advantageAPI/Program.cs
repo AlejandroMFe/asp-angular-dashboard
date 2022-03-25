@@ -17,7 +17,6 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -25,8 +24,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Acá le pido al asp.net que me gener un nuevo objeto del tipo DataSeed
+// este es un nuevo objeto en el contexto (scope) de la petición al servidor
 using (var scope = app.Services.CreateScope())
 {
+    // pido el servicio que necesito
     var service = scope.ServiceProvider.GetService<DataSeed>();
     service.SeedData(20, 1000);
 }
