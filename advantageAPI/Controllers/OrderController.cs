@@ -32,12 +32,40 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult Get(int id){
+    public IActionResult Get(int id)
+    {
         var order = _context.Orders.Include(e => e.Customer).FirstOrDefault(e => e.Id == id);
-        
-        if(order is null)
+
+        if (order is null)
             return NotFound();
-        
+
         return Ok(order);
+    }
+
+    [HttpGet("ByState")]
+    public IActionResult ByState()
+    {
+        // solicita a la BD que agrupe las ventas por State de cada Customer
+        // var orders = _context.Orders.Include(o => o.Customer).GroupBy(g => g.Customer.State)
+        // .Select(s => new {
+        //     State = s.Key,
+        //     Total = s.Sum(x => x.Total)
+        // })
+        // .ToList();
+
+        // trae todas las ordenes con la info de sus clientes
+        var orders = _context.Orders.Include(o => o.Customer).ToList();
+
+        var groupedResult = orders
+            // agrupo las ordenes por el estado del cliente
+            .GroupBy(o => o.Customer.State)
+            .ToList()
+            // de la agrupación creo un objeto y sumo los totales
+            // la agrupación tiene como clave State
+            .Select(grp => new { State = grp.Key, Total = grp.Sum(x => x.Total) })
+            .OrderByDescending(res => res.Total)
+            .ToList();
+
+        return Ok(groupedResult);
     }
 }
