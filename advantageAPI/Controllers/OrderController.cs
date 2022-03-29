@@ -45,6 +45,7 @@ public class OrderController : ControllerBase
     [HttpGet("ByState")]
     public IActionResult ByState()
     {
+        /** Otra forma de hacer la consulta
         // solicita a la BD que agrupe las ventas por State de cada Customer
         // var orders = _context.Orders.Include(o => o.Customer).GroupBy(g => g.Customer.State)
         // .Select(s => new {
@@ -52,6 +53,7 @@ public class OrderController : ControllerBase
         //     Total = s.Sum(x => x.Total)
         // })
         // .ToList();
+        */
 
         // trae todas las ordenes con la info de sus clientes
         var orders = _context.Orders.Include(o => o.Customer).ToList();
@@ -64,6 +66,30 @@ public class OrderController : ControllerBase
             // la agrupación tiene como clave State
             .Select(grp => new { State = grp.Key, Total = grp.Sum(x => x.Total) })
             .OrderByDescending(res => res.Total)
+            .ToList();
+
+        return Ok(groupedResult);
+    }
+
+    [HttpGet("ByCustomer/{nro}")]
+    public IActionResult ByCustomer(int nro)
+    {
+        // trae todas las ordenes con la info de sus clientes
+        var orders = _context.Orders.Include(o => o.Customer).ToList();
+
+        var groupedResult = orders
+            .GroupBy(o => o.Customer.Id)
+            .ToList()
+            .Select(
+                grp =>
+                    new
+                    {
+                        Name = _context.Customers.Find(grp.Key).Name,
+                        Total = grp.Sum(x => x.Total)
+                    }
+            )
+            .OrderByDescending(res => res.Total)
+            .Take(nro)
             .ToList();
 
         return Ok(groupedResult);
