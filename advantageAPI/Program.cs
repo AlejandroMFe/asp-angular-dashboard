@@ -7,6 +7,14 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddControllers();
 builder.Services.AddTransient<DataSeed>();
 
+// CorsPolicy
+builder.Services.AddCors(
+    opt =>
+    {
+        opt.AddPolicy("CorsPolicy", c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+    }
+);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -18,6 +26,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    // Add cors policy
+    app.UseCors("CorsPolicy");
 }
 
 // Acá le pido al asp.net que me gener un nuevo objeto del tipo DataSeed
