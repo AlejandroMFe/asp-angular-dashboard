@@ -3,17 +3,19 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.css']
+  styleUrls: [ './pagination.component.css' ]
 })
 export class PaginationComponent implements OnInit {
 
-  // @Input() page: number =2;
-  // @Input() count: number = 3;
-  // @Input() perPage: number = 1;
-  // @Input() pagesToShow: number = 5;
-  // @Input() loading = true;
+  @Input() page!: number;
+  @Input() count!: number;
+  @Input() perPage!: number;
+  @Input() pagesToShow!: number;
+  @Input() loading!: boolean;
 
   @Output() goPrev = new EventEmitter<boolean>();
+  @Output() goNext = new EventEmitter<boolean>();
+  @Output() goPage = new EventEmitter<number>();
 
   constructor() { }
 
@@ -22,5 +24,9 @@ export class PaginationComponent implements OnInit {
 
   onPrev(): void {
     this.goPrev.emit(true);
+  }
+
+  onNext(): void {
+    this.goNext.emit(true);
   }
 }
