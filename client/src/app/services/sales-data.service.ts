@@ -1,22 +1,27 @@
-import { Injectable } from "@angular/core"
-import { HttpClient } from "@angular/common/http"
-//import 'rxjs/add/operator/map'
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Order } from '../shared/order';
 
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SalesDataService {
 
-    constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-    getOrders(pageIndex: number, pageSize: number) {
-        return this.http.get('https://localhost:7167/Order/' + pageIndex + '/' + pageSize);
-    }
+  getOrders(page: number, limit: number) {
+    return this.http.get('https://localhost:7167/Order/' + page + '/' + limit);
+  }
 
-    getOrdersByCustomer(num: number) {
-        return this.http.get('https://localhost:7167/Order/bycustomer/' + num);
-    }
+  getOrderByState() {
+    return this.http.get('https://localhost:7167/Order/ByState');
+  }
 
-    getOrdersByState() {
-        return this.http.get('https://localhost:7167/Order/bystate');
-    }
+  getOrderById(id: number) {
+    return this.http.get('https://localhost:7167/Order/' + id);
+  }
+
+  getOrderByCustomer(id: number) {
+    return this.http.get('https://localhost:7167/Order/ByCustomer/' + id);
+  }
 }

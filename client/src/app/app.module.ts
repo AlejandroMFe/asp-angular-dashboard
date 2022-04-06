@@ -17,9 +17,6 @@ import { ServerComponent } from './server/server.component';
 import { PaginationComponent } from './pagination/pagination.component';
 import { HttpClientModule } from '@angular/common/http';
 
-// Import Services
-import { ServerService } from './services/server.service';
-
 @NgModule({
   declarations: [
     AppComponent,

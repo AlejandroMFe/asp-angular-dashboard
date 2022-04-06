@@ -1,6 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Order, SAMPLE_ORDERS } from '../../shared/order';
-import { SalesDataService } from 'src/app/services/sales-data.service';
 
 @Component({
   selector: 'app-section-orders',
