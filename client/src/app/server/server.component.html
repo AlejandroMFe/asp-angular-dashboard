@@ -3,11 +3,13 @@
   [ngStyle]="{ 'background-color': color }"
 >
   <div class="card-header name">{{ serverInput.name }}</div>
-  <div class="card-body status">{{ message }}</div>
-  <button
-    (click)="toggleStatus(serverInput.isOnline)"
+  <div class="card-body status">
+    {{ serverStatus }}
+    <button
+    (click)="sendServerAction(serverInput.isOnline)"
     class="btn btn-dark action"
   >
     {{ btnText }}
   </button>
+  </div>
 </div>
