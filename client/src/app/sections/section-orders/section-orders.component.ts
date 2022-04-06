@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SalesDataService } from 'src/app/services/sales-data.service';
 import { Order, SAMPLE_ORDERS } from '../../shared/order';
 
 @Component({
@@ -9,28 +10,28 @@ import { Order, SAMPLE_ORDERS } from '../../shared/order';
 export class SectionOrdersComponent implements OnInit {
 
   // injecto el servicio en el constructor
-  constructor() { }
+  constructor(private salesData: SalesDataService) { }
 
   // generate mock data for five orders
-  orders: Order[] = SAMPLE_ORDERS;
-
-  total = 0;
+  orders!: Order[]; // = SAMPLE_ORDERS;
+  total!: number;
   page = 1;
   limit = 10;
   loading = false;
+  response: any;
 
   ngOnInit(): void {
-    //this.getOrders();
+    this.getOrders();
   }
 
   getOrders(): void {
-    // this.salesData.getOrders(this.page, this.limit)
-    //   .subscribe(res => {
-    //     console.log("Result from getOrders:", res);
-    //     // this.orders = res['page'][ 'data' ];
-    //     // this.total = res['page'].total;
-    //     // this.loading = false;
-    //   })
+    this.salesData.getOrders(this.page, this.limit)
+      .subscribe(res => {
+        this.response = res;
+        //console.log(this.response);
+        this.orders = this.response.page.data;
+        this.total = this.response.total;
+      });
   }
 
   goToPrevious() {
