@@ -13,15 +13,15 @@ export class ServerService {
 
   getServers(): Observable<Server[]> {
     return this.http.get<Server[]>('https://localhost:7167/Server')
-
-    pipe(
-      retry(3), // reintentar 3 veces la peticion
-      catchError(this.handleError) // manejar el error
-    )
-    // !TODO: Add error handling
+      .pipe(
+        retry(3), // reintentar 3 veces la peticion
+        catchError(this.handleError) // manejar el error
+      )
   }
 
   handleError(error: any): ObservableInput<any> {
+    console.log("Hey algo esta mal!");
+
     const erroeMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
 
