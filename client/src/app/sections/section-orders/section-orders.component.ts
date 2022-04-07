@@ -18,7 +18,6 @@ export class SectionOrdersComponent implements OnInit {
   page = 1;
   limit = 10;
   loading = false;
-  response: any;
 
   ngOnInit(): void {
     this.getOrders();
@@ -27,18 +26,21 @@ export class SectionOrdersComponent implements OnInit {
   getOrders(): void {
     this.salesData.getOrders(this.page, this.limit)
       .subscribe(res => {
-        this.response = res;
         //console.log(this.response);
-        this.orders = this.response.page.data;
-        this.total = this.response.total;
+        this.orders = res.page.data;
+        this.total = res.total;
       });
   }
 
   goToPrevious() {
-    console.log('Previous Page!');
+    //console.log('Previous Page!');
+    this.page--;
+    this.getOrders();
   }
 
   goToNext() {
-    console.log('Next Page!');
+    //console.log('Next Page!');
+    this.page++;
+    this.getOrders();
   }
 }

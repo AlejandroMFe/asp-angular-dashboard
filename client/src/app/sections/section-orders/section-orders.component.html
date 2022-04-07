@@ -7,7 +7,7 @@
         <th>Custom</th>
         <th>Amount</th>
         <th>Order Placed</th>
-        <th>Order Fulfilled</th>
+        <th>Order Completed</th>
         <th>Status</th>
       </tr>
     </thead>
@@ -17,7 +17,7 @@
         <td>{{ order.customer.name }}</td>
         <td>{{ order.total }}</td>
         <td>{{ order.placed | date: "short" }}</td>
-        <td>{{ order.fulfilled | date: "short" }}</td>
+        <td>{{ order.completed | date: "short" }}</td>
         <td>Status</td>
       </tr>
     </tbody>
