@@ -56,7 +56,6 @@ export class PaginationComponent implements OnInit {
   }
 
   getPages(): number[] {
-    console.log("count:" ,this.count);
     
     const totalPages = Math.ceil(this.count / this.perPage);
     const thisPage = this.page || 1;

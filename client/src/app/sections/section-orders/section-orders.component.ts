@@ -28,8 +28,6 @@ export class SectionOrdersComponent implements OnInit {
       .subscribe(res => {
         this.orders = res.page.data;
         this.total = res.page.total;
-        console.log(res);
-        
         this.loading = false;
       });
   }
