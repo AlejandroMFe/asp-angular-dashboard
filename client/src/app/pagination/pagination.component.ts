@@ -56,12 +56,12 @@ export class PaginationComponent implements OnInit {
   }
 
   getPages(): number[] {
-    
+
     const totalPages = Math.ceil(this.count / this.perPage);
     const thisPage = this.page || 1;
     const pagesToShow = this.pagesToShow || 9;
     const pages: number[] = [];
-    pages.push(thisPage); // agrego la pagina actual
+    pages.push(thisPage); // siempre agrega la pagina actual
 
     // acá va construyendo la cajita con las paginas 
     // que se van a  mostrar
@@ -69,9 +69,8 @@ export class PaginationComponent implements OnInit {
     for (let i = 0; i < pagesToShow - 1; i++) {
       //console.log('pages[]: ', pages);
 
-
+      // mi arreglo ya tiene los 9 número que voy a mostrar?
       if (pages.length < pagesToShow) {
-        // como el nro de página es > 1 voy restando
         // hasta completar la cajita de páginas
         if (Math.min.apply(null, pages) > 1) {
           pages.push(Math.min.apply(null, pages) - 1);
@@ -79,8 +78,9 @@ export class PaginationComponent implements OnInit {
         }
       }
 
-
+      // mi arreglo ya tiene los 9 número que voy a mostrar?
       if (pages.length < pagesToShow) {
+        // Dame el maximo valor de todo mi arreglo
         if (Math.max.apply(null, pages) < totalPages) {
 
           // al nro de página más grande le sumo 1
