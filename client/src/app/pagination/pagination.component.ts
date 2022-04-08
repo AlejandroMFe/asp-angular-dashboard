@@ -63,15 +63,22 @@ export class PaginationComponent implements OnInit {
     const pages: number[] = [];
     pages.push(thisPage); // siempre agrega la pagina actual
 
-    // acá va construyendo la cajita con las paginas 
-    // que se van a  mostrar
+
+    /**
+     * Partiendo de la página actual, teniendo en cuenta que va a mostrar solo 9 números de páginas.
+     * Va agregando los valores al arreglo tanto a la izquierda como a la derecha
+     * hasta completar los 9 números en el arreglo y al final ordena de menor a mayor 
+     * todo el arreglo
+     */
     //console.log('Starting loop with:\n\ttotalPages:', totalPages, '\n\tthisPage:', thisPage, '\n\tpagesToShow:', pagesToShow);
     for (let i = 0; i < pagesToShow - 1; i++) {
       //console.log('pages[]: ', pages);
 
       // mi arreglo ya tiene los 9 número que voy a mostrar?
       if (pages.length < pagesToShow) {
-        // hasta completar la cajita de páginas
+        // traeme el míninmo valor del arreglo y si le puedo
+        // restar 1, restale y agrega ese resultado al arreglo.
+        // En esta parte construye las páginas menores a la actual.
         if (Math.min.apply(null, pages) > 1) {
           pages.push(Math.min.apply(null, pages) - 1);
           //console.log('pushing -1', Math.min.apply(null, pages) - 1, 'onto array');
@@ -80,10 +87,11 @@ export class PaginationComponent implements OnInit {
 
       // mi arreglo ya tiene los 9 número que voy a mostrar?
       if (pages.length < pagesToShow) {
-        // Dame el maximo valor de todo mi arreglo
+        // traeme el maximo valor del arreglo, es menor al total de páginas?
+        // Si, entonces sumale uno y agrega ese resultado al arreglo.
+        // No, entonces no entra
         if (Math.max.apply(null, pages) < totalPages) {
-
-          // al nro de página más grande le sumo 1
+          // al maximo valor del arreglo le sumo uno y lo agrego al arreglo.
           pages.push(Math.max.apply(null, pages) + 1);
           //console.log('pushing +1', Math.max.apply(null, pages) + 1, 'onto array');
         }
