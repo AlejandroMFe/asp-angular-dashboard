@@ -1,4 +1,17 @@
-<div>
-    <button class="btn btn-small btn-info" (click)="onPrev()">< Previous</button>
-    <button class="btn btn-small btn-info" (click)="onNext()">Next ></button>
+<div class="pages">
+  <span class="page-counts"> X - Y de Z ordenes</span>
+  <br />
+  <span class="page-totals">{{ totalPages() }} páginas totales </span>
+  <button class="btn btn-small btn-info" (click)="onPrev()">< Atrás</button>
+  
+  <button
+    class="btn btn-small btn-info"
+    *ngFor="let pageNum of getPages()"
+    (click)="onPage(pageNum)"
+    [ngClass]="{ active: pageNum === page, disabled: loading }"
+  >
+    {{ pageNum }}
+  </button>
+  
+  <button class="btn btn-small btn-info" (click)="onNext()">Adelante ></button>
 </div>

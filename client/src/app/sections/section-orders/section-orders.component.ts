@@ -14,7 +14,7 @@ export class SectionOrdersComponent implements OnInit {
 
   // generate mock data for five orders
   orders!: Order[]; // = SAMPLE_ORDERS;
-  total!: number;
+  total = 0;
   page = 1;
   limit = 10;
   loading = false;
@@ -28,7 +28,8 @@ export class SectionOrdersComponent implements OnInit {
       .subscribe(res => {
         //console.log(this.response);
         this.orders = res.page.data;
-        this.total = res.total;
+        this.total = res.totalPages;
+        this.loading = false;
       });
   }
 
@@ -41,6 +42,11 @@ export class SectionOrdersComponent implements OnInit {
   goToNext() {
     //console.log('Next Page!');
     this.page++;
+    this.getOrders();
+  }
+
+  goToPage(num: number) {
+    this.page = num;
     this.getOrders();
   }
 }
