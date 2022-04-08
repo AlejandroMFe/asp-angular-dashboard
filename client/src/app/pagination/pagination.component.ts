@@ -21,7 +21,6 @@ export class PaginationComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    
   }
 
   onPrev(): void {
@@ -44,28 +43,40 @@ export class PaginationComponent implements OnInit {
     return this.perPage * this.page >= this.count;
   }
 
+  getMin(): number {
+    return ((this.perPage * this.page) - this.perPage) + 1;
+  }
+
+  getMax(): number {
+    let max = this.perPage * this.page;
+    if (max > this.count) {
+      max = this.count;
+    }
+    return max;
+  }
+
   getPages(): number[] {
-    //console.log("count " + this.count, "perPage " + this.perPage, "this.page " + this.page);
+    console.log("count:" ,this.count);
     
     const totalPages = Math.ceil(this.count / this.perPage);
     const thisPage = this.page || 1;
     const pagesToShow = this.pagesToShow || 9;
     const pages: number[] = [];
     pages.push(thisPage); // agrego la pagina actual
-    
+
     // acá va construyendo la cajita con las paginas 
     // que se van a  mostrar
-    console.log('Starting loop with:\n\ttotalPages:', totalPages, '\n\tthisPage:', thisPage, '\n\tpagesToShow:', pagesToShow);
+    //console.log('Starting loop with:\n\ttotalPages:', totalPages, '\n\tthisPage:', thisPage, '\n\tpagesToShow:', pagesToShow);
     for (let i = 0; i < pagesToShow - 1; i++) {
-     console.log('pages[]: ', pages);
-      
+      //console.log('pages[]: ', pages);
+
 
       if (pages.length < pagesToShow) {
         // como el nro de página es > 1 voy restando
         // hasta completar la cajita de páginas
         if (Math.min.apply(null, pages) > 1) {
           pages.push(Math.min.apply(null, pages) - 1);
-          console.log('pushing -1', Math.min.apply(null, pages) - 1, 'onto array');
+          //console.log('pushing -1', Math.min.apply(null, pages) - 1, 'onto array');
         }
       }
 
@@ -75,7 +86,7 @@ export class PaginationComponent implements OnInit {
 
           // al nro de página más grande le sumo 1
           pages.push(Math.max.apply(null, pages) + 1);
-          console.log('pushing +1', Math.max.apply(null, pages) + 1, 'onto array');
+          //console.log('pushing +1', Math.max.apply(null, pages) + 1, 'onto array');
         }
       }
     }

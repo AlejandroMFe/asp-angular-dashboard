@@ -14,7 +14,7 @@ export class SectionOrdersComponent implements OnInit {
 
   // generate mock data for five orders
   orders!: Order[]; // = SAMPLE_ORDERS;
-  total = 0;
+  total !: number;
   page = 1;
   limit = 10;
   loading = false;
@@ -26,9 +26,10 @@ export class SectionOrdersComponent implements OnInit {
   getOrders(): void {
     this.salesData.getOrders(this.page, this.limit)
       .subscribe(res => {
-        //console.log(this.response);
         this.orders = res.page.data;
-        this.total = res.totalPages;
+        this.total = res.page.total;
+        console.log(res);
+        
         this.loading = false;
       });
   }
