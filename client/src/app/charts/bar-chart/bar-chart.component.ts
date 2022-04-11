@@ -62,7 +62,8 @@ export class BarChartComponent implements OnInit {
       }, []);
     //console.log(formattedOrders);
     // result: ['22-03-25', 2549]
-
+    console.log(formattedOrders);
+      
     // Necesito un arreglo con los Totales por Fecha
     const chartData: ChartData[] = [];
 
