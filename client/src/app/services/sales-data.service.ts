@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { Order } from '../shared/order';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +20,7 @@ export class SalesDataService {
     return this.http.get<any>('https://localhost:7167/Order/' + id);
   }
 
-  getOrderByCustomer(id: number) {
-    return this.http.get<any>('https://localhost:7167/Order/ByCustomer/' + id);
+  getOrderByCustomer(nro: number) {
+    return this.http.get<any>('https://localhost:7167/Order/ByCustomer/' + nro);
   }
 }
