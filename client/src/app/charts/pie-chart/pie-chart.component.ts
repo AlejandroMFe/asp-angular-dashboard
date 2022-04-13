@@ -27,7 +27,7 @@ export class PieChartComponent implements OnInit {
     }
   ];
 
-  public pieChartType: string = 'doughnut';
+  pieChartType: string = 'doughnut';
 
   ngOnInit(): void {
     // trabajar con la info que recibo del componente padre
