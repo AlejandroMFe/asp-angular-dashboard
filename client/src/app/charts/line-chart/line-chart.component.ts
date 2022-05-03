@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LINE_CHART_COLORS } from 'src/app/shared/chart.colors';
 import { SalesDataService } from 'src/app/services/sales-data.service';
+import { formatDate } from '@angular/common';
+import { top } from '@popperjs/core';
 
 const LINE_CHART_SAMPLE_DATA: any[] = [
   { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sentiment Analysis' },
@@ -18,7 +20,7 @@ export class LineChartComponent implements OnInit {
 
   constructor(private salesDataService: SalesDataService) { }
 
-  topCustomers !: string[];
+  topCustomers !: any[];
   allOrders !: any[];
   lineChartData!: any[];// = LINE_CHART_SAMPLE_DATA;
   lineChartLabels!: string[];// = LINE_CHART_LABELS;
@@ -28,42 +30,25 @@ export class LineChartComponent implements OnInit {
   lineChartColors: any[] = LINE_CHART_COLORS;
 
   ngOnInit(): void {
+
     this.salesDataService.getOrders(1, 100).subscribe(res => {
 
       // get all orders
       this.allOrders = res.page.data;
-      //console.log("data: ", this.allOrders);
 
-      // get 3 top customers
-      this.salesDataService.getOrderByCustomer(3).subscribe(res => {
-        this.topCustomers = res.map((c: { [ x: string ]: any; }) => c[ 'name' ]);
+      // format date for placed
+      this.allOrders.forEach(order => {
+        order.placed = formatDate(order.placed, "dd-MM-yyyy", "en-US");
+      });
+      console.log(this.allOrders[0].customer.name);
 
-        // get the order for each customer
-        var result = this.topCustomers.map(customer => {
-          return {
-            name: customer,
-            data: {
-              total: this.allOrders.filter(o => o[ 'customer' ].name === customer)
-                .map(o => o[ 'total' ]),
-              placed: this.allOrders.filter(o => o[ 'customer' ].name === customer)
-                .map(o => o[ 'placed' ])
-            }
-          }
-        });
-        //console.log(result);
+      // get top customers
+      this.salesDataService.getOrderByCustomer(4).subscribe(res => {
+        this.topCustomers = res;
+        console.log(this.topCustomers[ 1 ].name);
+        console.log(this.topCustomers[ 2 ].name);
+        console.log(this.topCustomers[ 3 ].name);
 
-        // format data
-        this.lineChartData = result.map(o => {
-          return {
-            data: o.data.total,
-            label: o.name
-          }
-        });
-        //console.log(lineChartData);        
-
-        this.lineChartLabels = this.allOrders.map(o => o[ 'placed' ]);
-        //console.log(lineChartLabels);
-        //const LINE_CHART_LABELS: string[] = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ];
 
       });
     });
