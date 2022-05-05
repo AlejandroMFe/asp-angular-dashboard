@@ -2,14 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { LINE_CHART_COLORS } from 'src/app/shared/chart.colors';
 import { SalesDataService } from 'src/app/services/sales-data.service';
 import { formatDate } from '@angular/common';
-import { top } from '@popperjs/core';
 
+const LINE_CHART_LABELS: string[] = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ];
 const LINE_CHART_SAMPLE_DATA: any[] = [
   { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sentiment Analysis' },
   { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Image Reconctinion' },
   { data: [ 18, 48, 77, 9, 100, 27, 40 ], label: 'Forecasting' }
 ];
-const LINE_CHART_LABELS: string[] = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ];
+
+type LineDataChart = {
+  data: number[];
+  label: string;
+};
 
 @Component({
   selector: 'app-line-chart',
@@ -34,23 +38,142 @@ export class LineChartComponent implements OnInit {
     this.salesDataService.getOrders(1, 100).subscribe(res => {
 
       // get all orders
-      this.allOrders = res.page.data;
+      const ordersData: any[] = res.page.data;
 
-      // format date for placed
-      this.allOrders.forEach(order => {
-        order.placed = formatDate(order.placed, "dd-MM-yyyy", "en-US");
+      // format dates
+      ordersData.forEach(order => {
+        order.placed = formatDate(order.placed, 'yyyy-MM-dd', 'en-US');
       });
-      console.log(this.allOrders[0].customer.name);
+      // console.log(ordersData);
 
-      // get top customers
       this.salesDataService.getOrderByCustomer(4).subscribe(res => {
-        this.topCustomers = res;
-        console.log(this.topCustomers[ 1 ].name);
-        console.log(this.topCustomers[ 2 ].name);
-        console.log(this.topCustomers[ 3 ].name);
 
+        this.topCustomers = res;
+        this.topCustomers.shift(); // remove first element, is duplicate
+        const customers = this.topCustomers;
+
+        // Orders by each one of top customers
+        type Data = { customer: string; date: string; total: number; };
+        let temp: Data[] = [];
+
+        customers.forEach(customer => {
+          ordersData.forEach(order => {
+            if (customer.name === order.customer.name) {
+              let obj = {
+                customer: order.customer.name,
+                date: order.placed,
+                total: order.total
+              };
+              //console.log(order.customer.name);
+              temp.push(obj);
+            }
+          });
+        });
+
+        // sort by customer and date
+        temp.sort((a, b) => {
+          if (a.customer > b.customer) {
+            return 1;
+          }
+          if (a.customer < b.customer) {
+            return -1;
+          }
+          if (a.date > b.date) {
+            return 1;
+          }
+          if (a.date < b.date) {
+            return -1;
+          }
+          return 0;
+        });
+        //console.log(temp);
+
+        // total orders by customer and date
+        let orders: Data[] = [];
+        let customer: string = temp[ 0 ].customer;
+        let date: string = temp[ 0 ].date;
+        let total: number = 0;
+        temp.forEach(order => {
+          if (customer === order.customer && date === order.date) {
+            total += order.total;
+          } else {
+            let obj = {
+              customer: customer,
+              date: date,
+              total: total
+            };
+            orders.push(obj);
+            customer = order.customer;
+            date = order.date;
+            total = order.total;
+          }
+        });
+        let obj = {
+          customer: customer,
+          date: date,
+          total: total
+        };
+        orders.push(obj);
+        //console.log("orders", orders);
+
+        // get all dates from sum
+        const dates: string[] = [];
+        orders.forEach(order => {
+          if (!dates.includes(order.date)) {
+            dates.push(order.date);
+          }
+        });
+        dates.sort();
+        this.lineChartLabels = dates;
+        //console.log("dates", dates);
+
+        // Fill lineChartData with data from sum
+        let output: LineDataChart[] = [];
+        /**
+        [
+          { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sentiment Analysis' },
+          { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Image Reconctinion' },
+          { data: [ 18, 48, 77, 9, 100, 27, 40 ], label: 'Forecasting' }
+        ];
+         */
+
+        // Necesito recorrer todas las fechas dentreo de dates
+        // recorrer los clientes top customer
+        // y por cada cliente guardar el total para esa fecha
+        // si no tiene fechas completar con cero
+        customers.forEach(x => {
+          let obj = {
+            label: x.name,
+            data: getSalesForDate(x.name, orders, dates)
+          }
+          output.push(obj);
+        })
+        console.log(output);
+        this.lineChartData = output;
 
       });
     });
   }
+}
+
+function getSalesForDate(cutomer: any, orders: { customer: string; date: string; total: number; }[], dates: string[]) {
+  let ventas: number[] = [];
+
+  // para un customer
+  // obtener las ventas para cada fecha
+  // si no tuvo ventas retornar 0
+  dates.forEach(date => {
+    let venta = 0;
+
+    // busca en todas las orders si tiene ventas esa fecha
+    orders.forEach(order => {
+      if (order.customer === cutomer && order.date === date) {
+        venta = order.total;
+      }
+    }
+    );
+    ventas.push(venta);
+  }
+  );
+  return ventas;
 }
