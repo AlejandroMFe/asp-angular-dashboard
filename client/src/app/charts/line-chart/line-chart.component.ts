@@ -20,6 +20,7 @@ type LineDataChart = {
   templateUrl: './line-chart.component.html',
   styleUrls: [ './line-chart.component.css' ]
 })
+
 export class LineChartComponent implements OnInit {
 
   constructor(private salesDataService: SalesDataService) { }
@@ -30,12 +31,15 @@ export class LineChartComponent implements OnInit {
   lineChartLabels!: string[];// = LINE_CHART_LABELS;
   lineChartOptions: any = { responsive: true };
   lineChartLegend: boolean = true;
-  lineChartType: string = 'line';
+  lineChartType: any = 'line';
   lineChartColors: any[] = LINE_CHART_COLORS;
 
   ngOnInit(): void {
-
     this.salesDataService.getOrders(1, 100).subscribe(res => {
+
+      // this const have the data for line chart graphic
+      const output: LineDataChart[] = [];
+      const dates: string[] = [];
 
       // get all orders
       const ordersData: any[] = res.page.data;
@@ -46,6 +50,7 @@ export class LineChartComponent implements OnInit {
       });
       // console.log(ordersData);
 
+      // get top 3 customers
       this.salesDataService.getOrderByCustomer(4).subscribe(res => {
 
         this.topCustomers = res;
@@ -56,6 +61,7 @@ export class LineChartComponent implements OnInit {
         type Data = { customer: string; date: string; total: number; };
         let temp: Data[] = [];
 
+        // get the orders data for each one of top customers
         customers.forEach(customer => {
           ordersData.forEach(order => {
             if (customer.name === order.customer.name) {
@@ -93,6 +99,7 @@ export class LineChartComponent implements OnInit {
         let customer: string = temp[ 0 ].customer;
         let date: string = temp[ 0 ].date;
         let total: number = 0;
+
         temp.forEach(order => {
           if (customer === order.customer && date === order.date) {
             total += order.total;
@@ -117,40 +124,31 @@ export class LineChartComponent implements OnInit {
         //console.log("orders", orders);
 
         // get all dates from sum
-        const dates: string[] = [];
+
         orders.forEach(order => {
           if (!dates.includes(order.date)) {
             dates.push(order.date);
           }
         });
         dates.sort();
-        this.lineChartLabels = dates;
         //console.log("dates", dates);
 
-        // Fill lineChartData with data from sum
-        let output: LineDataChart[] = [];
-        /**
-        [
-          { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sentiment Analysis' },
-          { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Image Reconctinion' },
-          { data: [ 18, 48, 77, 9, 100, 27, 40 ], label: 'Forecasting' }
-        ];
-         */
-
-        // Necesito recorrer todas las fechas dentreo de dates
+        // Necesito recorrer todas las fechas dentro de dates
         // recorrer los clientes top customer
         // y por cada cliente guardar el total para esa fecha
         // si no tiene fechas completar con cero
         customers.forEach(x => {
           let obj = {
-            label: x.name,
-            data: getSalesForDate(x.name, orders, dates)
+            "label": x.name,
+            "data": getSalesForDate(x.name, orders, dates)
           }
           output.push(obj);
         })
-        console.log(output);
-        this.lineChartData = output;
 
+
+        // Pass data to lineChartData
+        this.lineChartLabels = dates;
+        this.lineChartData = output;
       });
     });
   }
