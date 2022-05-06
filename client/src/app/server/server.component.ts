@@ -39,42 +39,36 @@ export class ServerComponent implements OnInit {
   }
 
   sendServerAction(isOnline: boolean) {
-    console.log('sendServerAction activated!');    
+    console.log("From server.component.ts");
+    console.log('\tsendServerAction activated!');
     this.makeLoading();
     const payload = this.buildPayload(isOnline);
     this.serverAction.emit(payload);
   }
 
   buildPayload(isOnline: boolean): ServerMessage {
-    var newPayload!: string;
 
     if (isOnline) {
-      //return {
-      //id: this.serverInput.id,
-      newPayload = 'offline';
-      //};
+      // shutdown the server
+      return {
+        id: this.serverInput.id,
+        status: false
+      }
     } else {
-      //   return {
-      //     id: this.serverInput.id,
-      newPayload = 'online'
-      //};
-    }
-    return {
-      id: this.serverInput.id,
-      payload: newPayload
+      // start the server
+      return {
+        id: this.serverInput.id,
+        status: true
+      }
     }
   }
 
+  // maneja el momento de cargar cuando hago click en el boton
+  // para Start/Shutdown el servidor
   makeLoading() {
     this.color = '#FFF176'; // amarillo
     this.btnText = 'loading...';
     this.isLoading = true;
-    this.serverStatus = 'Loading';
+    this.serverStatus = 'Loading 🕒';
   }
-
-  // toggleStatus(status:boolean): void{
-  //   //console.log(this.serverInput.name);
-  //   this.setServerStatus(!status);
-  // }
-
 }

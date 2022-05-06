@@ -1,4 +1,8 @@
 export interface ServerMessage {
     id: number;
-    payload: string;
+
+    // represents the status of the server
+    // true = online
+    // false = offline
+    status: boolean;
 }

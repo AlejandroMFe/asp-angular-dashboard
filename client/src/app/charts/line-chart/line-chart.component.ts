@@ -3,12 +3,12 @@ import { LINE_CHART_COLORS } from 'src/app/shared/chart.colors';
 import { SalesDataService } from 'src/app/services/sales-data.service';
 import { formatDate } from '@angular/common';
 
-const LINE_CHART_LABELS: string[] = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ];
-const LINE_CHART_SAMPLE_DATA: any[] = [
-  { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sentiment Analysis' },
-  { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Image Reconctinion' },
-  { data: [ 18, 48, 77, 9, 100, 27, 40 ], label: 'Forecasting' }
-];
+// const LINE_CHART_LABELS: string[] = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July' ];
+// const LINE_CHART_SAMPLE_DATA: any[] = [
+//   { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Sentiment Analysis' },
+//   { data: [ 28, 48, 40, 19, 86, 27, 90 ], label: 'Image Reconctinion' },
+//   { data: [ 18, 48, 77, 9, 100, 27, 40 ], label: 'Forecasting' }
+// ];
 
 type LineDataChart = {
   data: number[];

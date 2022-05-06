@@ -1,15 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, ObservableInput, pipe } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, ObservableInput } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { Server } from '../shared/server';
+import { ServerMessage } from '../shared/server-message';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServerService {
+  headers: HttpHeaders;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+
+    // generate headers for the request
+    this.headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+  }
 
   getServers(): Observable<Server[]> {
     return this.http.get<Server[]>('https://localhost:7167/Server')
@@ -27,5 +36,11 @@ export class ServerService {
 
     console.log(erroeMsg);
     throw new Error(erroeMsg);
+  }
+
+  ServerMessage(message: ServerMessage): Observable<Response> {
+
+    const url = "https://localhost:7167/Server/" + message.id;
+    return this.http.put<Response>(url, message, { headers: this.headers });
   }
 }

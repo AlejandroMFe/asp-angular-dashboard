@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Server, SAMPLE_SERVERS } from '../../shared/server';
 import { ServerService } from 'src/app/services/server.service';
-import { timer } from 'rxjs';
-import { Subscription } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
+import { ServerMessage } from 'src/app/shared/server-message';
 
 @Component({
   selector: 'app-section-health',
@@ -19,13 +19,11 @@ export class SectionHealthComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.refreshData();
   }
-
   ngOnDestroy(): void {
     if (this.timerSubscription) {
       this.timerSubscription.unsubscribe();
     }
   }
-
   refreshData() {
     this.serverService.getServers().subscribe(
       res => {
@@ -34,9 +32,15 @@ export class SectionHealthComponent implements OnInit, OnDestroy {
 
     this.subscribeToData();
   }
-
   subscribeToData() {
     this.timerSubscription = timer(5000).subscribe(() => this.refreshData());
   }
-
+  sendMessage(message: ServerMessage) {
+    this.serverService.ServerMessage(message).subscribe(
+      res => {
+        console.log("From section-helth");
+        console.log("\tMessage sent to server: ", message);
+      }
+    );
+  }
 }
